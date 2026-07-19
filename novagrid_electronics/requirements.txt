@@ -1,0 +1,8 @@
+streamlit>=1.36.0
+pandas>=2.0.0
+numpy>=1.24.0
+plotly>=5.20.0
+SQLAlchemy>=2.0.0
+Pillow>=10.0.0
+streamlit-option-menu>=0.3.13
+reportlab>=4.0.0

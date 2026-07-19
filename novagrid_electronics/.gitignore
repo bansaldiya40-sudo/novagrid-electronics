@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+novagrid.db
+.streamlit/secrets.toml
+_to_delete/
