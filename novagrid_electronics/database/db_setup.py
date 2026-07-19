@@ -10,6 +10,7 @@ in real time.
 
 import os
 import json
+import tempfile
 import datetime as dt
 
 from sqlalchemy import (
@@ -19,7 +20,20 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, scoped_session
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(BASE_DIR, "novagrid.db")
+
+# Locally, the SQLite file lives right next to the project (so it persists
+# across restarts and is easy to find). On a hosted platform like Streamlit
+# Community Cloud, the app's own source folder is checked out read-only, so
+# writing novagrid.db there fails with "unable to open database file" the
+# moment the app tries to create its tables. Fall back to a writable temp
+# directory in that case — the app still works, it just means the demo data
+# resets on each redeploy/restart there, same as any ephemeral-storage host.
+if os.access(BASE_DIR, os.W_OK):
+    DB_DIR = BASE_DIR
+else:
+    DB_DIR = tempfile.gettempdir()
+
+DB_PATH = os.path.join(DB_DIR, "novagrid.db")
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 engine = create_engine(
